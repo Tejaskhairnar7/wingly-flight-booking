@@ -1,0 +1,33 @@
+/* Print: booking confirmation fits one A4 page, without site chrome or screen-only decoration. */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+@media print {
+  header,
+  footer,
+  body > a[href="#main"] {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+    min-height: 0 !important;
+  }
+  body {
+    display: block !important;
+  }
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

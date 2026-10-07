@@ -1,0 +1,82 @@
+/* Motion utilities. Reduced-motion users get near-instant transitions via the rule in globals.css. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-45deg);
+  }
+  50% {
+    transform: translate(3px, -2px) rotate(-45deg);
+  }
+}
+
+/* Entrance on load; stagger with style={{ "--d": "120ms" }} */
+.anim-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+/* Dropdown / popover panels */
+.anim-pop {
+  animation: pop-in 0.16s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: top;
+}
+/* Calendar: pops on desktop, slides up as a bottom sheet on phones */
+.anim-sheet {
+  animation: pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: top;
+}
+@media (max-width: 639px) {
+  .anim-sheet {
+    animation: sheet-up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+/* Scroll reveal (see components/ui/Reveal.js) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Logo plane drifts while the logo is hovered */
+.group:hover .plane-drift {
+  animation: drift 1.2s ease-in-out infinite;
+}

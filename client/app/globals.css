@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@import "./motion.css";
+@import "./print.css";
+
+/* Design tokens — see DESIGN.md */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #eef1ff;
+  --color-brand-100: #dde3ff;
+  --color-brand-200: #bcc7ff;
+  --color-brand-500: #3a52e0;
+  --color-brand-600: #1b2fb8;
+  --color-brand-700: #11229a;
+  --color-brand-900: #08124f;
+
+  --color-ink: #0f1b33;
+  --color-ink-soft: #475574;
+  --color-ink-faint: #6b7896;
+  --color-line: #dfe5f1;
+  --color-surface: #ffffff;
+  --color-canvas: #f4f7fc;
+
+  --color-success: #0f8a5f;
+  --color-success-soft: #e3f6ee;
+  --color-warning: #a35a00;
+  --color-warning-soft: #fff3df;
+  --color-danger: #c62839;
+  --color-danger-soft: #fdebed;
+
+  --radius-card: 1rem;
+  --shadow-card: 0 1px 2px rgb(15 27 51 / 0.05), 0 4px 16px rgb(15 27 51 / 0.06);
+  --shadow-pop: 0 10px 40px rgb(15 27 51 / 0.16);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* In the base layer so utilities like `outline-none` (used on tile inputs, whose tile shows the focus ring) can override it */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e8edf6;
+  border-radius: 0.5rem;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.65), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
