@@ -39,7 +39,7 @@ cd client && cp .env.example .env.local && npm install && npm run dev  # web :30
 | `server/.env` | `MONGODB_URI` | MongoDB connection string (default: local `flight_booking` DB) |
 | `server/.env` | `CLIENT_ORIGIN` | Allowed CORS origin, i.e. the web app's URL |
 | `server/.env` | `PORT` | API port (default `5050`) |
-| `client/.env.local` | `NEXT_PUBLIC_API_URL` | API base URL, e.g. `http://localhost:5050/api` |
+| `client/.env.local` | `NEXT_PUBLIC_API_URL` (or `NEXT_API_URL`) | API base URL ending in `/api`, e.g. `http://localhost:5050/api` |
 
 ## API
 

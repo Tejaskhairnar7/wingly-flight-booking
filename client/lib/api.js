@@ -1,4 +1,5 @@
-const BASE = process.env.NEXT_API_URL || "http://localhost:5050/api";
+// NEXT_PUBLIC_API_URL is filled from NEXT_PUBLIC_API_URL or NEXT_API_URL in next.config.mjs
+const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050/api").replace(/\/+$/, "");
 
 export class ApiError extends Error {
   constructor(message, { status = 0, fields } = {}) {
