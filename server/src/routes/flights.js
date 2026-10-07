@@ -39,13 +39,30 @@ flightsRouter.get("/flights", async (req, res) => {
   res.json({ flights, query: q });
 });
 
-const isLoopback = (ip = "") => ip === "::1" || ip.startsWith("127.") || ip === "::ffff:127.0.0.1";
+// Private / loopback ranges: never a visitor's public address.
+const isPrivate = (ip = "") =>
+  ip === "::1" || /^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)/.test(ip) || /^(fc|fd|fe80)/i.test(ip);
+
+// The visitor's public IP. Behind a host's proxy (Render/Cloudflare) the socket address is the proxy's,
+// so read the forwarded headers first. Returns "" locally, which makes the geo service use the caller's own IP.
+function clientIp(req) {
+  const forwarded = [req.headers["cf-connecting-ip"], req.headers["x-real-ip"], ...String(req.headers["x-forwarded-for"] || "").split(",")]
+    .map((v) => String(v || "").trim().replace(/^::ffff:/, ""))
+    .filter(Boolean);
+  const candidates = [...forwarded, String(req.socket.remoteAddress || "").replace(/^::ffff:/, "")];
+  const publicIp = candidates.find((ip) => !isPrivate(ip));
+  if (publicIp) return publicIp;
+  // Local development: the browser is on this machine, so the server's own public IP is the visitor's.
+  // Deployed, no public IP means we can't know the visitor's city; null avoids showing the host's city.
+  return forwarded.length === 0 ? "" : null;
+}
 
 // Default "From" airport: IP -> city (ipwho.is) -> Duffel airport. Returns { location: null } when unknown;
 // never invents a city.
 flightsRouter.get("/locations/nearby", async (req, res) => {
   // Behind localhost the browser's IP is unknowable here, so ask the geo service to use the caller's public IP.
-  const ip = isLoopback(req.ip) ? "" : req.ip.replace(/^::ffff:/, "");
+  const ip = clientIp(req);
+  if (ip === null) return res.json({ location: null });
   const location = await cached(`geo:${ip || "self"}`, 60 * 60_000, async () => {
     try {
       const geo = await fetch(`https://ipwho.is/${encodeURIComponent(ip)}`, { signal: AbortSignal.timeout(5000) }).then((r) => r.json());

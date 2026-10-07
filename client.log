@@ -1,0 +1,17 @@
+
+> client@0.1.0 dev
+> next dev
+
+▲ Next.js 16.4.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.238.251.7:3000
+- Environments: .env.local
+✓ Ready in 1449ms
+⚠ Warning: Next.js ignored package-lock.json in C:\Users\tejas because it is outside the current Git repository (C:\Users\tejas\Downloads\flight-booking).
+ To use this directory, set `turbopack.root` in your Next.js config.
+
+✓ Running next.config.mjs took 49ms
+
+○ Compiling / ...
+ GET / 200 in 1406ms (next.js: 5ms, application-code: 1401ms)
+ GET / 200 in 2.4s (next.js: 535ms, application-code: 1881ms)
